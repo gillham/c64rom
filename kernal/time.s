@@ -31,7 +31,21 @@ ud20	inc time+2
 ;
 ud30	sec
 	lda time+2
+;
+; This off by one bug counted one extra jiffy per day.
+; found by Robin @ 8-Bit Show and Tell.
+; ("Commodore 64 and 128 TIME: Exploration of TI and TI$")
+; Jiffies in a 24 hours day should be 0 to 24*60*60*60-1.
+; That is 0-5183999 so we should subtract 5184000 to see
+; if it has rolled over. The stock kernal was subtracting
+; 5148001. (so 0-514800 inclusive)
+;
+.ifdef ENABLE_PATCHES
+
+	sbc #$00
+.else
 	sbc #$01
+.endif
 	lda time+1
 	sbc #$1a
 	lda time

@@ -21,7 +21,20 @@ noml6	ldy fbufpt
 	lda faclo
 	jmp settim
 timnum	lda (index),y
+;
+; This patch fixes the issue where you can assign
+; invalid digits to TI.  (TI="ABCDEF" is accepted)
+; Found by Rob @ 8-Bit Show and Tell.
+; ("Commodore 64 and 128 TIME: Exploration of TI and TI$")
+; This calls a zero page routine 4 bytes earlier where it
+; checks for ':' (first character after the '9' digit)
+; Now this ensures just digits 0-9 are valid.
+;
+.ifdef ENABLE_PATCHES
+	jsr qnum-4
+.else
 	jsr qnum
+.endif
 	bcc gotnum
 fcerr2	jmp fcerr
 gotnum	sbc #$2f

@@ -21,7 +21,21 @@ geterr	lda (index1),y
 	pla
 	bpl geterr
 	jsr stkini
+;
+; This patch fixes an extra space in "<something>  ERROR"
+; messages.
+; Found by Robin @ 8-Bit Show and Tell.
+; ("The Extra Spaces in Commodore 64 BASIC Errors")
+;
+; Rather than shift 'ERROR' in the ROM by removing a space
+; this just points to 1 byte past the 'err' label thus
+; skipping 1 space.
+;
+.ifdef ENABLE_PATCHES
+	lda #<err+1
+.else
 	lda #<err
+.endif
 	ldy #>err
 errfin	jsr strout
 	ldy curlin+1

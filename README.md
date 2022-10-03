@@ -41,3 +41,23 @@ Any ROMs after 1983 (so also all ROMs we create today) should be checksummed usi
 ## Credits
 
 This version is maintained by Michael Steil <mist64@mac.com>, [www.pagetable.com](https://www.pagetable.com/)
+
+## Unofficial patches
+
+This repository includes unofficial patches to the BASIC and KERNAL ROMs.
+
+Added patches:
+ - Remove extra space when printing positve numbers (Robin @ 8-Bit Show and Tell)
+ - Remove extra space in "ERROR" messages and two extra in "BREAK ERROR" (Robin @ 8-Bit Show and Tell)
+ - Don't count 1 extra jiffy per 24 hour day. (Robin @ 8-Bit Show and Tell)
+ - Assigning TI$ should only accept numbers. (Robin @ 8-Bit Show and Tell)
+ - Placeholder for your favorite patch...
+
+See additional comments in the source code / diffs.
+
+In order to build the version with the unofficial patches you need to add `ASFLAGS=-DENABLE_PATCHES` to the `make` command.
+The example below also shows overriding the SHELL variable since the Makefile uses it and it breaks if your shell is something like fish.
+
+```bash
+$ env SHELL=/bin/bash make ASFLAGS=-DENABLE_PATCHES
+```

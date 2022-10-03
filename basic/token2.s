@@ -147,7 +147,22 @@ intxt	.byt " IN ",0
 reddy	.byt $d,$a,"READY.",$d,$a,0
 erbrk	=30
 brktxt	.byt $d,$a
+;
+; This patch fixes an extra space printed after BREAK.
+; Found by Robin @ 8-Bit Show and Tell
+; ("The Extra Spaces in Commodore 64 BASIC Errors")
+;
+; The error message print routine expects the last character
+; to have the high bit set.  This indicates end of string.
+; The "BREAK" message has a space character with the high-bit
+; set.  This causes an extra space.  Setting this to an
+; unprintable with the high-bit fixes the issue.
+;
+.ifdef ENABLE_PATCHES
+err30	.byt "BREAK",0,$80 ;shifted unprintable
+.else
 err30	.byt "BREAK",0,$a0 ;shifted space
+.endif
 
 forsiz	=$12
 fndfor	tsx

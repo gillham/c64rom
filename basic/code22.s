@@ -14,7 +14,22 @@ linprt	sta facho
 	jsr foutc
 strou2	jmp strout
 fout	ldy #1
+;
+; This patch fixes the blank space printed in
+; front of postive numbers.
+;
+; Found by Robin @ 8-Bit Show and Tell
+; ("That Blank Space Before Numbers in Commodore 64 BASIC")
+;
+; BASIC loads a space that may be replaced by a '-' for a
+; negative number. The patch loads an unprintable so if it
+; is a positive number nothing prints.
+;
+.ifdef ENABLE_PATCHES
+foutc	lda #$01
+.else
 foutc	lda #' '
+.endif
 	bit facsgn
 	bpl fout1
 	lda #'-'
